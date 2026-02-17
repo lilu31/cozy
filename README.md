@@ -17,6 +17,33 @@ Cozy is a modern Home Energy Management System (HEMS) MVP designed to optimize e
 - **Database**: [TimescaleDB](https://www.timescale.com/) (PostgreSQL extension for time-series)
 - **Optimization**: Google OR-Tools
 
+## 🧠 AI Optimization Engine
+
+Cozy uses a sophisticated linear programming model to make intelligent energy decisions.
+
+### How it works
+The system solves for the **optimal battery schedule** (charge/discharge) for the next 24 hours to minimize total cost.
+
+**Inputs:**
+1.  **Day-Ahead Prices**: Fetched dynamically (simulated for MVP) to know when energy is cheap or expensive.
+2.  **Load Forecast**: Predicts home consumption based on time-of-day profiling.
+3.  **Solar Forecast**: Estimates PV production based on sun hours.
+
+**Decision Variables:**
+- `battery_charge[t]`: How much to charge at time *t*.
+- `battery_discharge[t]`: How much to discharge at time *t*.
+- `grid_import[t]` / `grid_export[t]`: Net grid interaction.
+
+**Constraints:**
+- Battery cannot charge and discharge simultaneously.
+- State of Charge (SoC) must stay within physical limits (e.g., 10% - 90%).
+- Energy Balance: `Load = Solar + Grid + Discharging - Charging`.
+
+**Objective:**
+$$ \text{Minimize} \sum_{t=0}^{24h} (\text{GridImport}_t \times \text{Price}_t - \text{GridExport}_t \times \text{FeedInTariff}) $$
+
+This ensures the battery charges when prices are low (or negative!) and discharges when prices are high, automatically arbitrating the market for you.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
