@@ -27,8 +27,10 @@ The system solves for the **optimal battery schedule** (charge/discharge) for th
 
 **Inputs:**
 1.  **Day-Ahead Prices**: Fetched dynamically (simulated for MVP) to know when energy is cheap or expensive.
-2.  **Load Forecast**: Predicts home consumption based on time-of-day profiling.
-3.  **Solar Forecast**: Estimates PV production based on sun hours.
+2.  **Load & Solar Forecasts**:
+    *   Powered by **NeuralForecast** (using architectures like **TiDE** or **N-BEATS**).
+    *   Analyzes historical consumption/generation data to predict the next 24 hours.
+    *   Accounts for behavioral patterns (e.g., morning coffee spikes, evening TV) and weather dependency.
 
 **Decision Variables:**
 - `battery_charge[t]`: How much to charge at time *t*.
