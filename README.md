@@ -16,6 +16,7 @@ Cozy is a modern Home Energy Management System (HEMS) MVP designed to optimize e
 - **Backend**: [FastAPI](https://fastapi.tiangolo.com/) (Python)
 - **Database**: [TimescaleDB](https://www.timescale.com/) (PostgreSQL extension for time-series)
 - **Optimization**: Google OR-Tools
+- **Forecasting**: NeuralForecast (TiDE/N-BEATS)
 
 ## 🧠 AI Optimization Engine
 
@@ -95,9 +96,4 @@ flutter run -d chrome
 
 *(Add screenshots here)*
 
-## 🔮 Future Roadmap
 
-- [ ] Connect to real hardware interfaces (Modbus/MQTT).
-- [ ] Integrate live weather forecasts for better solar prediction.
-- [ ] Multi-user tenancy support.
-- [ ] Mobile-native build (iOS/Android).
