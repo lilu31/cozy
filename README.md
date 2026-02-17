@@ -96,6 +96,10 @@ flutter run -d chrome
 
 ## 📸 Screenshots
 
-*(Add screenshots here)*
+| Dashboard | Optimization |
+|:---:|:---:|
+| ![Dashboard](assets/screenshots/optimization_preview.png) | ![Optimization](assets/screenshots/detailed_analysis.png) |
+| **Savings & Assets** | **Detailed Views** |
+| ![Savings](assets/screenshots/savings_summary.png) | ![Assets](assets/screenshots/assets_view.png) |
 
 
