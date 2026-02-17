@@ -96,10 +96,10 @@ flutter run -d chrome
 
 ## 📸 Screenshots
 
-| Dashboard | Optimization |
+| Dashboard | Savings (Real-time) |
 |:---:|:---:|
-| ![Dashboard](assets/screenshots/optimization_preview.png) | ![Optimization](assets/screenshots/detailed_analysis.png) |
-| **Savings & Assets** | **Detailed Views** |
-| ![Savings](assets/screenshots/savings_summary.png) | ![Assets](assets/screenshots/assets_view.png) |
+| ![Dashboard](assets/screenshots/detailed_analysis.png) | ![Savings](assets/screenshots/savings_summary.png) |
+| **Optimization Engine** | **Asset Monitor** |
+| ![Optimization](assets/screenshots/optimization_preview.png) | ![Assets](assets/screenshots/assets_view.png) |
 
 
