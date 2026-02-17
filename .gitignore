@@ -1,0 +1,38 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+*.env
+
+# Flutter SDK
+flutter/
+
+# Flutter App
+.dart_tool/
+.packages
+.pub/
+build/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+android/.gradle
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Mac
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Large Files
+*.zip
