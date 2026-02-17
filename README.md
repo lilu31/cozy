@@ -33,19 +33,20 @@ The system solves for the **optimal battery schedule** (charge/discharge) for th
     *   Accounts for behavioral patterns (e.g., morning coffee spikes, evening TV) and weather dependency.
 
 **Decision Variables:**
-- `battery_charge[t]`: How much to charge at time *t*.
-- `battery_discharge[t]`: How much to discharge at time *t*.
+- `battery_charge[t]` / `battery_discharge[t]`: Optimal battery strategy.
+- `ev_charge[t]`: Optimal Electric Vehicle charging schedule.
 - `grid_import[t]` / `grid_export[t]`: Net grid interaction.
 
 **Constraints:**
 - Battery cannot charge and discharge simultaneously.
-- State of Charge (SoC) must stay within physical limits (e.g., 10% - 90%).
-- Energy Balance: `Load = Solar + Grid + Discharging - Charging`.
+- State of Charge (SoC) for both Battery and EV must stay within limits.
+- **EV Constraint**: Must be charged to target level (e.g., 80%) by departure time (e.g., 07:00 AM).
+- Energy Balance: `Load + EV_Charge = Solar + Grid + Bat_Discharge - Bat_Charge`.
 
 **Objective:**
 $$ \text{Minimize} \sum_{t=0}^{24h} (\text{GridImport}_t \times \text{Price}_t - \text{GridExport}_t \times \text{FeedInTariff}) $$
 
-This ensures the battery charges when prices are low (or negative!) and discharges when prices are high, automatically arbitrating the market for you.
+This ensures the **Battery** charges when prices are low and discharges when high, while the **EV** intelligently schedules its charging session during the cheapest windows (e.g., late night or peak solar) without compromising departure readiness.
 
 ## 🚀 Getting Started
 
