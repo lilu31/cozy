@@ -5,7 +5,7 @@ Cozy is a modern Home Energy Management System (HEMS) MVP designed to optimize e
 ## ✨ Features
 
 - **Real-Time Visualization**: Animated "Energy Flow" dashboard showing Solar, Grid, Battery, Home Load, and EV activity.
-- **AI Optimization**: Uses linear programming (`ortools`) to schedule battery charging/discharging based on dynamic electricity prices (Day-Ahead Market).
+- **Optimization**: Uses linear programming (`ortools`) to schedule battery charging/discharging based on dynamic electricity prices (Day-Ahead Market).
 - **Realistic Simulation**: Simulates home load profiles with morning and evening peaks.
 - **Financial Tracking**: Tracks real-time savings compared to a "dumb" benchmark (no battery/smart control).
 - **Asset Management**: Supports PV (Solar), Battery, and EV assets.
@@ -20,7 +20,7 @@ Cozy is a modern Home Energy Management System (HEMS) MVP designed to optimize e
 
 ## 🧠 AI Optimization Engine
 
-Cozy uses a sophisticated linear programming model to make intelligent energy decisions.
+Cozy uses a sophisticated linear programming model to make intelligent energy decisions based on forecasts.
 
 ### How it works
 The system solves for the **optimal battery schedule** (charge/discharge) for the next 24 hours to minimize total cost.
