@@ -1,6 +1,6 @@
 # Cozy 🏠⚡️
 
-Cozy is a modern Home Energy Management System (HEMS) MVP designed to optimize energy usage, maximize savings, and provide a beautiful, real-time overview of your home's energy flow.
+Cozy is a modern Home Energy Management System (HEMS) app prototype designed to optimize energy usage, maximize savings, and provide a beautiful, real-time overview of your home's energy flow.
 
 ## ✨ Features
 
