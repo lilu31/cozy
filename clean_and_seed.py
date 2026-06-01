@@ -25,9 +25,9 @@ def clean_and_seed():
         battery = session.exec(select(Asset).where(Asset.asset_type == AssetType.BATTERY)).first()
         ev = session.exec(select(Asset).where(Asset.asset_type == AssetType.EV)).first()
         
-        # 3. Generate Time Range (Dec 1 to Now + 1 day forecast)
+        # 3. Generate Time Range (30 days ago to Now + 1 day forecast)
         now = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
-        start = now.replace(day=1, hour=0, minute=0, second=0)
+        start = (now - timedelta(days=30)).replace(hour=0, minute=0, second=0)
         end = now + timedelta(hours=24)
         
         print(f"Seeding from {start} to {end}")
