@@ -17,7 +17,7 @@
 ---
 </div>
 
-Cozy is a premium, high-fidelity Home Energy Management System (HEMS) designed to optimize battery dispatches, schedule Electric Vehicle charging sessions, and maximize financial savings. Cozy leverages linear programming to solve complex cost-minimization equations in real time based on dynamic grid day-ahead pricing and active home energy profiles.
+Cozy is a premium, high-fidelity Home Energy Management System (HEMS) prototype designed to optimize battery dispatches, schedule Electric Vehicle charging sessions, and maximize financial savings. Cozy leverages linear programming to solve complex cost-minimization equations in real time based on dynamic grid day-ahead pricing and active home energy profiles.
 
 Beyond typical dashboard visualization, Cozy implements:
 *   **Linear Programming Solver**: Powered by Google OR-Tools to compute optimal schedules.
