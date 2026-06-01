@@ -241,13 +241,13 @@ class _WavePainter extends CustomPainter {
       (end.y + 1) / 2 * size.height,
     );
 
-    final paint = Paint()
-      ..color = color.withOpacity(0.25)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 40.0 // Really thick flow
-      ..strokeCap = StrokeCap.round;
-      
-    paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 20); // Very soft, glowing diffused edges
+    final glowLayers = [
+      {'width': 80.0, 'opacity': 0.02, 'blur': 30.0},
+      {'width': 55.0, 'opacity': 0.05, 'blur': 18.0},
+      {'width': 35.0, 'opacity': 0.09, 'blur': 10.0},
+      {'width': 18.0, 'opacity': 0.14, 'blur': 4.0},
+      {'width': 8.0, 'opacity': 0.20, 'blur': 1.0},
+    ];
 
     final path = Path();
     final angle = (p2 - p1).direction;
@@ -280,9 +280,24 @@ class _WavePainter extends CustomPainter {
       path.lineTo(x + offsetX, y + offsetY);
     }
 
-    canvas.drawPath(path, paint);
-    
-    // Core line removed as requested
+    // Draw progressive glow layers
+    for (final layer in glowLayers) {
+      final width = layer['width'] as double;
+      final opacity = layer['opacity'] as double;
+      final blur = layer['blur'] as double;
+
+      final paint = Paint()
+        ..color = color.withOpacity(opacity)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = width
+        ..strokeCap = StrokeCap.round;
+
+      if (blur > 0) {
+        paint.maskFilter = MaskFilter.blur(BlurStyle.normal, blur);
+      }
+
+      canvas.drawPath(path, paint);
+    }
   }
 
   @override
