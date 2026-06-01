@@ -100,6 +100,7 @@ class EnergyFlowView extends ConsumerWidget {
                 label: "SOLAR",
                 icon: PhosphorIcons.sun(PhosphorIconsStyle.fill),
                 color: AppTheme.warmYellow,
+                isPulse: solar > 0,
               ),
             ),
 
@@ -112,6 +113,7 @@ class EnergyFlowView extends ConsumerWidget {
                 label: grid > 0 ? "IMPORT" : "EXP",
                 icon: PhosphorIcons.lightning(PhosphorIconsStyle.fill),
                 color: AppTheme.charcoal, 
+                isPulse: grid != 0,
               ),
             ),
 
@@ -124,6 +126,7 @@ class EnergyFlowView extends ConsumerWidget {
                 label: battery > 0 ? "DISCHG" : (battery < 0 ? "CHG" : "BAT"),
                 icon: PhosphorIcons.batteryCharging(PhosphorIconsStyle.fill),
                 color: AppTheme.terracotta,
+                isPulse: battery.abs() > 0.05,
               ),
             ),
 
@@ -136,6 +139,7 @@ class EnergyFlowView extends ConsumerWidget {
                 label: "EV",
                 icon: PhosphorIcons.car(PhosphorIconsStyle.fill),
                 color: AppTheme.charcoal,
+                isPulse: ev.abs() > 0.05,
               ),
             ),
 
@@ -149,6 +153,7 @@ class EnergyFlowView extends ConsumerWidget {
                   label: "HOME",
                   icon: PhosphorIcons.house(PhosphorIconsStyle.fill),
                   color: AppTheme.dullRed,
+                  isPulse: load > 0.05,
                 ),
               ),
             ),
@@ -311,29 +316,31 @@ class _DataBubble extends StatelessWidget {
   final String? label;
   final IconData icon;
   final Color color;
+  final bool isPulse;
 
   const _DataBubble({
     required this.value,
     this.label,
     required this.icon,
     required this.color,
+    this.isPulse = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final bubble = Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.15),
-            blurRadius: 12,
+            color: color.withOpacity(isPulse ? 0.25 : 0.15),
+            blurRadius: isPulse ? 16 : 12,
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: color.withOpacity(0.1), width: 1.5),
+        border: Border.all(color: color.withOpacity(isPulse ? 0.2 : 0.1), width: 1.5),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -353,7 +360,7 @@ class _DataBubble extends StatelessWidget {
             children: [
               Text(
                 value,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppTheme.charcoal,
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
@@ -373,6 +380,23 @@ class _DataBubble extends StatelessWidget {
           ),
         ],
       ),
-    ).animate().scale(duration: 300.ms, curve: Curves.easeOutBack);
+    );
+
+    if (isPulse) {
+      // Elegant custom breathing pulse animation loop using flutter_animate
+      return bubble
+          .animate()
+          .scale(duration: 300.ms, curve: Curves.easeOutBack)
+          .then()
+          .animate(onPlay: (controller) => controller.repeat(reverse: true))
+          .scale(
+            begin: const Offset(1, 1),
+            end: const Offset(1.05, 1.05),
+            duration: 1200.ms,
+            curve: Curves.easeInOut,
+          );
+    } else {
+      return bubble.animate().scale(duration: 300.ms, curve: Curves.easeOutBack);
+    }
   }
 }
