@@ -311,7 +311,7 @@ class _WavePainter extends CustomPainter {
   }
 }
 
-class _DataBubble extends StatelessWidget {
+class _DataBubble extends StatefulWidget {
   final String value;
   final String? label;
   final IconData icon;
@@ -327,76 +327,127 @@ class _DataBubble extends StatelessWidget {
   });
 
   @override
+  State<_DataBubble> createState() => _DataBubbleState();
+}
+
+class _DataBubbleState extends State<_DataBubble> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+
+    if (widget.isPulse) {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _DataBubble oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isPulse != oldWidget.isPulse) {
+      if (widget.isPulse) {
+        _controller.repeat(reverse: true);
+      } else {
+        _controller.stop();
+        _controller.animateTo(0.0, duration: const Duration(milliseconds: 300));
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final bubble = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(isPulse ? 0.25 : 0.15),
-            blurRadius: isPulse ? 16 : 12,
-            offset: const Offset(0, 4),
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        final double progress = widget.isPulse ? _animation.value : 0.0;
+        
+        // 1. Inside Background Tinted Wash
+        final Color backgroundColor = Color.lerp(
+          Colors.white,
+          widget.color.withOpacity(0.04 + (progress * 0.06)), // 4% to 10% tinted wash
+          widget.isPulse ? 1.0 : 0.0,
+        )!;
+
+        // 2. Border Color Pulsing
+        final Color borderColor = widget.isPulse
+            ? widget.color.withOpacity(0.15 + (progress * 0.25)) // 15% to 40% opacity
+            : widget.color.withOpacity(0.1);
+
+        // 3. Edge Glow Shadow Pulsing
+        final double blurRadius = widget.isPulse ? (10.0 + (progress * 10.0)) : 12.0;
+        final Color shadowColor = widget.isPulse
+            ? widget.color.withOpacity(0.10 + (progress * 0.20)) // 10% to 30% glow opacity
+            : widget.color.withOpacity(0.15);
+
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: shadowColor,
+                blurRadius: blurRadius,
+                offset: const Offset(0, 4),
+              ),
+            ],
+            border: Border.all(color: borderColor, width: 1.5),
           ),
-        ],
-        border: Border.all(color: color.withOpacity(isPulse ? 0.2 : 0.1), width: 1.5),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, size: 14, color: color),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  color: AppTheme.charcoal,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: widget.color.withOpacity(widget.isPulse ? (0.12 + (progress * 0.08)) : 0.1),
+                  shape: BoxShape.circle,
                 ),
+                child: Icon(widget.icon, size: 14, color: widget.color),
               ),
-              if (label != null)
-                Text(
-                  label!,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.8,
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    widget.value,
+                    style: const TextStyle(
+                      color: AppTheme.charcoal,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   ),
-                ),
+                  if (widget.label != null)
+                    Text(
+                      widget.label!,
+                      style: TextStyle(
+                        color: widget.isPulse
+                            ? Color.lerp(Colors.grey[600], widget.color, 0.5)
+                            : Colors.grey[600],
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
-    );
-
-    if (isPulse) {
-      // Elegant custom breathing pulse animation loop using flutter_animate
-      return bubble
-          .animate()
-          .scale(duration: 300.ms, curve: Curves.easeOutBack)
-          .then()
-          .animate(onPlay: (controller) => controller.repeat(reverse: true))
-          .scale(
-            begin: const Offset(1, 1),
-            end: const Offset(1.05, 1.05),
-            duration: 1200.ms,
-            curve: Curves.easeInOut,
-          );
-    } else {
-      return bubble.animate().scale(duration: 300.ms, curve: Curves.easeOutBack);
-    }
+        );
+      },
+    ).animate().scale(duration: 300.ms, curve: Curves.easeOutBack);
   }
 }
