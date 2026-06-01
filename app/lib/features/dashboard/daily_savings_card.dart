@@ -40,6 +40,7 @@ class DailySavingsCard extends ConsumerWidget {
           data: (data) {
             final savings48h = (data['summary']?['savings_eur'] ?? 0.0);
             final savingsMonth = (data['month_savings_eur'] ?? 0.0);
+            final monthLabel = data['month_label'] as String? ?? "Jun";
             
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -51,9 +52,8 @@ class DailySavingsCard extends ConsumerWidget {
                 ),
                 Container(height: 50, width: 1, color: Colors.grey.withOpacity(0.2)),
                 _SavingsItem(
-                  label: "Savings (DEC)", // Hardcoded for now or use formatting
+                  label: "Savings ($monthLabel)",
                   value: savingsMonth,
-                  isMonth: true,
                 ),
               ],
             );
@@ -70,22 +70,17 @@ class _SavingsItem extends StatelessWidget {
   final String label;
   final double value;
   final bool showChevron;
-  final bool isMonth;
 
   const _SavingsItem({
     required this.label, 
     required this.value, 
     this.showChevron = false,
-    this.isMonth = false
   });
 
   @override
   Widget build(BuildContext context) {
-    // Dynamic Month Label
+    // Render the label directly as received from server
     String displayLabel = label;
-    if (isMonth) {
-       displayLabel = "Savings (${DateFormat('MMM').format(DateTime.now())})";
-    }
 
     return Expanded(
       child: Column(

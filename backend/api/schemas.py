@@ -30,6 +30,7 @@ class ChartPoint(BaseModel):
 class DashboardResponse(BaseModel):
     summary: SavingsSummary
     month_savings_eur: float = 0.0 # Added Monthly Savings
+    month_label: Optional[str] = "Jun" # Added dynamic Month label
     current: CurrentStateResponse
     history: List[ChartPoint]
     forecast: List[ChartPoint]

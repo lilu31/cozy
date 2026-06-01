@@ -139,7 +139,12 @@ def get_dashboard_summary(user: User = Depends(get_current_context)):
         if not user: return {}
 
         # 1. Savings (Last 48h)
-        now = datetime.utcnow()
+        import os
+        screenshot_time = os.getenv("COZY_SCREENSHOT_TIME")
+        if screenshot_time:
+            now = datetime.fromisoformat(screenshot_time)
+        else:
+            now = datetime.utcnow()
         now_floored = now.replace(minute=0, second=0, microsecond=0)
         
         # A. Last 48h
@@ -279,6 +284,7 @@ def get_dashboard_summary(user: User = Depends(get_current_context)):
         return DashboardResponse(
             summary=savings_data_48h,
             month_savings_eur=savings_month_eur,
+            month_label=now.strftime("%b"),
             current=current_state,
             history=[],
             forecast=forecast_points
