@@ -18,7 +18,13 @@ class OptimizationOrchestrator:
         
         # 2. Prepare Optimization Horizon
         # We want to optimize for [Now, Now + 48h]
-        now = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
+        import os
+        screenshot_time = os.getenv("COZY_SCREENSHOT_TIME")
+        if screenshot_time:
+            now = datetime.fromisoformat(screenshot_time)
+        else:
+            now = datetime.utcnow()
+        now = now.replace(minute=0, second=0, microsecond=0)
         horizon_steps = 192 # 15-min intervals for 48h? 48*4 = 192.
         
         # Check if we have prices for this horizon
