@@ -242,12 +242,12 @@ class _WavePainter extends CustomPainter {
     );
 
     final paint = Paint()
-      ..color = color.withOpacity(0.35)
+      ..color = color.withOpacity(0.25)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 40.0 // Really thick flow
       ..strokeCap = StrokeCap.round;
       
-    paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 10); // Slightly reduced blur for higher definition and intensity
+    paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 12); // Elegant middle ground blur
 
     final path = Path();
     final angle = (p2 - p1).direction;
