@@ -374,11 +374,11 @@ class _DataBubbleState extends State<_DataBubble> with SingleTickerProviderState
       builder: (context, child) {
         final double progress = widget.isPulse ? _animation.value : 0.0;
         
-        // 1. Inside Background Tinted Wash
+        // 1. Solid Tinted Wash Background (100% Opaque Base)
         final Color backgroundColor = Color.lerp(
           Colors.white,
-          widget.color.withOpacity(0.04 + (progress * 0.06)), // 4% to 10% tinted wash
-          widget.isPulse ? 1.0 : 0.0,
+          widget.color,
+          widget.isPulse ? (0.08 + (progress * 0.08)) : 0.0, // 8% to 16% solid blend
         )!;
 
         // 2. Border Color Pulsing
